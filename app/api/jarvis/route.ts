@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { anthropic, JARVIS_SYSTEM_PROMPT } from "@/lib/claude";
 import type { JarvisAction, JarvisIntentResponse } from "@/lib/jarvisActions";
+import { getFacts, getRecentContext, saveConversation, saveFact } from "@/lib/memory";
 
 interface ConversationTurn {
   role: "user" | "assistant";
@@ -38,11 +39,24 @@ export async function POST(request: NextRequest) {
     text?: string;
     history?: ConversationTurn[];
     activePlace?: string | null;
+    view?: string;
   };
   const text = body.text?.trim();
 
   if (!text) {
     return NextResponse.json({ error: "Missing text" }, { status: 400 });
+  }
+
+  const [recentContext, facts] = await Promise.all([getRecentContext(10), getFacts()]);
+
+  let systemPrompt = JARVIS_SYSTEM_PROMPT;
+  if (facts.length > 0) {
+    systemPrompt += `\n\n## Bekannte Fakten über den Nutzer\n${facts.map((f) => `- ${f.key}: ${f.value}`).join("\n")}`;
+  }
+  if (recentContext.length > 0) {
+    systemPrompt += `\n\n## Letzte Unterhaltungen (Langzeit-Gedächtnis, älteste zuerst)\n${recentContext
+      .map((c) => `[${new Date(c.ts).toLocaleString("de-DE")}] Nutzer: ${c.user_input}\nJarvis: ${c.jarvis_response}`)
+      .join("\n\n")}`;
   }
 
   const contextLine = `[Aktiver Ort: ${body.activePlace?.trim() || "keiner"}]`;
@@ -55,7 +69,7 @@ export async function POST(request: NextRequest) {
     const completion = await anthropic.messages.create({
       model: "claude-sonnet-4-6",
       max_tokens: 768,
-      system: JARVIS_SYSTEM_PROMPT,
+      system: systemPrompt,
       messages,
     });
 
@@ -68,6 +82,11 @@ export async function POST(request: NextRequest) {
       actions: sanitizeActions(parsedRaw.actions),
       ask: typeof parsedRaw.ask === "string" && parsedRaw.ask ? parsedRaw.ask : undefined,
     };
+
+    void saveConversation(text, parsed.ask || parsed.spoken, body.view ?? null, parsed.actions);
+    for (const action of parsed.actions) {
+      if (action.type === "remember_fact") void saveFact(action.key, action.value);
+    }
     return NextResponse.json(parsed);
   } catch (error) {
     console.error("jarvis route error", error);

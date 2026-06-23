@@ -78,6 +78,7 @@ export function useJarvisVoice() {
             text: transcript,
             history: historyRef.current.slice(-10),
             activePlace: getActivePlaceName(),
+            view: pathnameRef.current,
           }),
         });
         data = await res.json();

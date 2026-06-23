@@ -109,6 +109,12 @@ export interface ViewAction {
   name: "command_center" | "globe" | "markets" | "pipeline" | "morning" | "voice";
 }
 
+export interface RememberFactAction {
+  type: "remember_fact";
+  key: string;
+  value: string;
+}
+
 export interface NoneAction {
   type: "none";
 }
@@ -134,6 +140,7 @@ export type JarvisAction =
   | SmarthomeAction
   | SystemAction
   | ViewAction
+  | RememberFactAction
   | NoneAction;
 
 export interface JarvisIntentResponse {

@@ -4,7 +4,7 @@ import { useState } from "react";
 import { HudCorner, ScanLines } from "@/components/hud";
 import { VoiceOrb } from "./VoiceOrb";
 import { VoiceWaveform } from "./VoiceWaveform";
-import { useJarvisVoice } from "@/lib/useJarvisVoice";
+import { useJarvisVoiceState } from "@/lib/JarvisVoiceProvider";
 import type { VoiceStatus } from "@/lib/voice";
 
 const STATUS_LABEL: Record<VoiceStatus, string> = {
@@ -17,7 +17,7 @@ const STATUS_LABEL: Record<VoiceStatus, string> = {
 const DEV_STATUSES: VoiceStatus[] = ["idle", "listening", "processing", "speaking"];
 
 export function VoiceView() {
-  const { status: liveStatus, lastSpoken, amplitudeRef, supported } = useJarvisVoice();
+  const { status: liveStatus, lastSpoken, amplitudeRef, supported } = useJarvisVoiceState();
   const [override, setOverride] = useState<VoiceStatus | null>(null);
   const status = override ?? liveStatus;
   const isLive = override === null;
