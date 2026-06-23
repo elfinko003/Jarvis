@@ -10,7 +10,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "dist": "next build && electron-builder"
+    "dist": "next build && electron-builder",
+    "postinstall": "node scripts/copy-cesium-assets.js"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.105.0",

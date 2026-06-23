@@ -1,9 +1,10 @@
+import { Suspense } from "react";
+import { WorldGlobeView } from "@/components/views/WorldGlobeView";
+
 export default function WorldGlobePage() {
   return (
-    <main className="flex min-h-screen items-center justify-center">
-      <p className="text-text-dim text-sm tracking-widest uppercase">
-        ▸ SATELLITEN // WELT-NETZ // AWAITING MODULE
-      </p>
-    </main>
+    <Suspense fallback={null}>
+      <WorldGlobeView />
+    </Suspense>
   );
 }

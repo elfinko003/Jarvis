@@ -73,7 +73,14 @@ export function useJarvisVoice() {
       if (!cancelled) setLastSpoken(spoken);
 
       if (data.action === "navigate" && data.view && VIEW_ROUTES[data.view]) {
-        router.push(VIEW_ROUTES[data.view]);
+        let path = VIEW_ROUTES[data.view];
+        const qs = new URLSearchParams();
+        for (const [key, value] of Object.entries(data.params ?? {})) {
+          if (typeof value === "string" && value) qs.set(key, value);
+        }
+        const qsString = qs.toString();
+        if (qsString) path += `?${qsString}`;
+        router.push(path);
       }
 
       if (cancelled) return;
