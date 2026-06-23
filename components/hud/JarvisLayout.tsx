@@ -16,9 +16,10 @@ interface JarvisLayoutProps {
   module: string;
   children: ReactNode;
   tickerItems?: string[];
+  headerCenter?: ReactNode;
 }
 
-export function JarvisLayout({ module, children, tickerItems }: JarvisLayoutProps) {
+export function JarvisLayout({ module, children, tickerItems, headerCenter }: JarvisLayoutProps) {
   return (
     <div className="relative flex h-screen flex-col overflow-hidden bg-bg-black text-text-bright">
       <div
@@ -28,12 +29,13 @@ export function JarvisLayout({ module, children, tickerItems }: JarvisLayoutProp
       <div aria-hidden className="jarvis-particles pointer-events-none absolute inset-0 z-0" />
       <ScanLines />
 
-      <header className="relative z-10 flex items-start justify-between px-6 pt-5">
+      <header className="relative z-10 flex items-start gap-4 px-6 pt-5">
         <div className="font-display text-[15px] font-black uppercase tracking-[3px]">
           <span className="text-orange [text-shadow:0_0_10px_var(--orange)]">JARVIS</span>
           <span className="text-text-dim"> // </span>
           <span className="text-text-bright">{module}</span>
         </div>
+        <div className="flex flex-1 items-center justify-center pt-1">{headerCenter}</div>
         <StatusBar />
       </header>
 
