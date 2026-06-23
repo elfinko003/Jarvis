@@ -21,9 +21,12 @@ const RINGS: Ring[] = [
 
 interface VoiceOrbProps {
   status: VoiceStatus;
+  /** When provided, drives the sphere from live playback levels (see
+   * useJarvisVoice) instead of the deterministic sampleAmplitude preview. */
+  amplitudeRef?: { current: number };
 }
 
-export function VoiceOrb({ status }: VoiceOrbProps) {
+export function VoiceOrb({ status, amplitudeRef }: VoiceOrbProps) {
   const sphereRef = useRef<HTMLDivElement>(null);
   const glowRef = useRef<HTMLDivElement>(null);
 
@@ -33,7 +36,7 @@ export function VoiceOrb({ status }: VoiceOrbProps) {
 
     const tick = () => {
       const t = (performance.now() - start) / 1000;
-      const amp = sampleAmplitude(status, t);
+      const amp = amplitudeRef ? amplitudeRef.current : sampleAmplitude(status, t);
       const scale = 0.95 + amp * 0.14;
 
       if (sphereRef.current) {
@@ -48,7 +51,7 @@ export function VoiceOrb({ status }: VoiceOrbProps) {
 
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
-  }, [status]);
+  }, [status, amplitudeRef]);
 
   return (
     <div className="relative h-[280px] w-[280px]">
