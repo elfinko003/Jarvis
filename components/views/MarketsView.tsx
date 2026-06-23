@@ -118,13 +118,13 @@ export function MarketsView() {
 
   return (
     <JarvisLayout module="AKTIEN // MÄRKTE">
-      <div className="flex h-full gap-3">
-        <div className="h-full w-[260px] shrink-0">
+      <div className="flex h-full flex-col gap-3 overflow-y-auto lg:flex-row lg:overflow-visible">
+        <div className="h-full lg:w-[260px] lg:shrink-0">
           <MarketWatchlist entries={watchlist} />
         </div>
 
         <div className="flex min-w-0 flex-1 flex-col gap-3">
-          <div className="flex gap-3">
+          <div className="flex flex-wrap gap-3">
             {indices.map((idx) => (
               <MarketIndexTile key={idx.symbol} symbol={idx.symbol} price={idx.price} change={idx.change} decimals={0} />
             ))}
@@ -133,7 +133,7 @@ export function MarketsView() {
             )}
           </div>
 
-          <Panel title={`HAUPTINDEX · ${dax?.symbol ?? "DAX"}`} className="flex-[3] min-h-0">
+          <Panel title={`HAUPTINDEX · ${dax?.symbol ?? "DAX"}`} className="min-h-[260px] lg:min-h-0 lg:flex-[3]">
             <div className="h-full">
               <MarketMainChart data={dax?.history ?? []} />
             </div>
@@ -143,13 +143,13 @@ export function MarketsView() {
             <MarketHeatmap entries={heatmap} />
           </Panel>
 
-          <div className="flex flex-[2] min-h-0 gap-3">
-            <Panel title="BTC/USD · 7D" className="flex-1 min-h-0">
+          <div className="flex flex-col gap-3 sm:flex-row lg:flex-[2] lg:min-h-0">
+            <Panel title="BTC/USD · 7D" className="min-h-[220px] flex-1 sm:min-h-0">
               <div className="h-full">
                 <MarketCandlestick candles={btcCandles} />
               </div>
             </Panel>
-            <Panel title={`${nasdaq?.symbol ?? "NASDAQ"} · LIVE`} className="flex-1 min-h-0">
+            <Panel title={`${nasdaq?.symbol ?? "NASDAQ"} · LIVE`} className="min-h-[220px] flex-1 sm:min-h-0">
               <div className="h-full">
                 <MarketLineChart data={nasdaq?.history ?? []} color="var(--green)" />
               </div>

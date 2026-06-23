@@ -12,18 +12,28 @@ import { NewsFeed } from "./NewsFeed";
 export function CommandCenterView() {
   return (
     <JarvisLayout module="COMMAND CENTER" headerCenter={<CommandCenterTabs />}>
-      <div className="flex h-full flex-col gap-3">
-        <div className="grid min-h-0 flex-[3] grid-cols-[1fr_1.6fr_1fr] gap-3">
-          <RadarRing />
-          <ReactorCore />
-          <StatusMetricsList />
+      <div className="flex h-full flex-col gap-3 overflow-y-auto lg:overflow-visible">
+        <div className="flex flex-col gap-3 lg:grid lg:min-h-0 lg:flex-[3] lg:grid-cols-[1fr_1.6fr_1fr]">
+          <div className="min-h-[280px] shrink-0 lg:min-h-0">
+            <RadarRing />
+          </div>
+          <div className="min-h-[280px] shrink-0 lg:min-h-0">
+            <ReactorCore />
+          </div>
+          <div className="min-h-[280px] shrink-0 lg:min-h-0">
+            <StatusMetricsList />
+          </div>
         </div>
 
         <KpiBar />
 
-        <div className="grid min-h-0 flex-[2] grid-cols-2 gap-3">
-          <AlarmPanel />
-          <NewsFeed />
+        <div className="flex flex-col gap-3 sm:grid sm:grid-cols-2 lg:min-h-0 lg:flex-[2]">
+          <div className="min-h-[260px] shrink-0 sm:min-h-0">
+            <AlarmPanel />
+          </div>
+          <div className="min-h-[260px] shrink-0 sm:min-h-0">
+            <NewsFeed />
+          </div>
         </div>
       </div>
     </JarvisLayout>

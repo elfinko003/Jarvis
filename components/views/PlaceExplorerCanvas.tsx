@@ -86,12 +86,13 @@ export function PlaceExplorerCanvas({ command, markers, newsHotspots, idle, dayN
       }
       viewer.scene.globe.baseColor = Cesium.Color.fromCssColorString("#05050a");
 
+      const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       let lastTime = performance.now();
       const idleRotate = () => {
         const now = performance.now();
         const dt = (now - lastTime) / 1000;
         lastTime = now;
-        if (!isFlyingRef.current) {
+        if (!isFlyingRef.current && !reducedMotion) {
           viewer.scene.camera.rotate(Cesium.Cartesian3.UNIT_Z, -IDLE_ROTATE_SPEED * dt);
         }
       };

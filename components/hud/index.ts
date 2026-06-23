@@ -8,3 +8,4 @@ export { Ticker } from "./Ticker";
 export { JarvisLayout } from "./JarvisLayout";
 export { ViewRotationController } from "./ViewRotationController";
 export { ViewTransition } from "./ViewTransition";
+export { LoadingState, ErrorState } from "./LoadingState";

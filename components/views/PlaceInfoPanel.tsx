@@ -1,6 +1,6 @@
 "use client";
 
-import { Panel } from "@/components/hud";
+import { Panel, LoadingState } from "@/components/hud";
 import { currencyForCca2, findCountryByCca2, flagEmoji } from "@/lib/countries";
 import type { PlaceResult, PlaceType } from "@/lib/geocode";
 import type { WeatherData } from "@/app/api/weather/route";
@@ -106,6 +106,12 @@ export function PlaceInfoPanel({ place, weather, airQuality, articles, loadingNe
         </p>
       </Panel>
 
+      {!weather && (
+        <Panel title="WETTER">
+          <LoadingState label="LADE WETTERDATEN" />
+        </Panel>
+      )}
+
       {weather && (
         <Panel title="WETTER">
           <p className="font-mono text-3xl text-text-bright">{weather.temp}°C</p>
@@ -153,7 +159,7 @@ export function PlaceInfoPanel({ place, weather, airQuality, articles, loadingNe
 
       <Panel title={`AKTUELLE LAGE · ${country?.name.toUpperCase() ?? place.countryCode ?? "—"}`}>
         <div className="space-y-1.5 font-mono text-[10px] text-text-dim">
-          {loadingNews && <p>▸ LADE…</p>}
+          {loadingNews && <LoadingState />}
           {!loadingNews && situationLines.length === 0 && <p>Keine aktuellen Berichte.</p>}
           {situationLines.map((line, i) => (
             <p key={i} className="text-text-bright">
@@ -177,7 +183,7 @@ export function PlaceInfoPanel({ place, weather, airQuality, articles, loadingNe
 
       <Panel title="TOP-NEWS" className="flex-1">
         <div className="space-y-1.5">
-          {loadingNews && <p className="font-mono text-[10px] text-text-dim">▸ LADE NACHRICHTEN…</p>}
+          {loadingNews && <LoadingState label="LADE NACHRICHTEN" />}
           {!loadingNews && articles.length === 0 && (
             <p className="font-mono text-[10px] text-text-dim">Keine Daten verfügbar.</p>
           )}

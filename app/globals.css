@@ -218,6 +218,7 @@ body {
   content: "▌";
   margin-left: 4px;
   animation: cursor-blink 1s steps(1) infinite;
+  will-change: opacity;
 }
 
 @keyframes cursor-blink {
@@ -258,6 +259,7 @@ body {
 
 .radar-blip {
   animation: radar-blip-pulse 2.4s ease-in-out infinite;
+  will-change: opacity, transform;
 }
 
 @keyframes radar-blip-pulse {
@@ -298,4 +300,5 @@ body {
 
 .scan-line {
   animation: scan-line-sweep 6s linear infinite;
+  will-change: top;
 }

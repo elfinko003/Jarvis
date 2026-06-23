@@ -5,6 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import type { JarvisAction, JarvisIntentResponse } from "@/lib/jarvisActions";
 import { VIEW_ROUTES, requiresExplorerView } from "@/lib/jarvisActions";
 import { getActivePlaceName, publishActions } from "@/lib/explorerBus";
+import { playWakeBeep } from "@/lib/sfx";
 import {
   isSpeechRecognitionSupported,
   speak,
@@ -46,7 +47,10 @@ export function useJarvisVoice() {
 
     const beginWakeListening = () => {
       wakeHandleRef.current = startWakeWordListening(() => {
-        if (!cancelled) handleWake();
+        if (!cancelled) {
+          playWakeBeep();
+          handleWake();
+        }
       });
     };
 

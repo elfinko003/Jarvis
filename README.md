@@ -1,36 +1,90 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# JARVIS
 
-## Getting Started
+A personal, Iron-Man-style voice command center built on Next.js + Cesium +
+Claude. Runs as a regular web app for development, and as a fullscreen
+Electron kiosk app for daily use.
 
-First, run the development server:
+## Setup
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+# create .env.local at the project root, then fill in the keys below
+npm run dev                        # Next.js + Electron together
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+`npm run dev:next` runs just the Next.js dev server at `localhost:3000` if
+you don't need the Electron shell while iterating on a view.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## API keys
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Put these in `.env.local` at the project root. Nothing here is required to
+boot the app — every integration degrades gracefully (a themed "unavailable"
+state, not a crash) if its key is missing, but you'll want at least
+Anthropic + ElevenLabs for the voice assistant to do anything.
 
-## Learn More
+| Variable | Service | Used for | Cost | Get it at |
+|---|---|---|---|---|
+| `ANTHROPIC_API_KEY` | Anthropic | Jarvis's brain — all intent parsing and spoken replies | ~$10–20/mo | console.anthropic.com |
+| `ELEVENLABS_API_KEY` | ElevenLabs | Jarvis's voice (TTS) | $0–5/mo | elevenlabs.io |
+| `ELEVENLABS_VOICE_ID` | ElevenLabs | which voice to speak with (male, calm, British accent recommended) | — | elevenlabs.io → Voices |
+| `NEWSAPI_KEY` | NewsAPI | headlines for Command Center + the place explorer | $0 (100 req/day) | newsapi.org |
+| `OPENWEATHER_KEY` | OpenWeatherMap | weather everywhere it's shown/spoken | $0 | openweathermap.org |
+| `WINDY_WEBCAMS_KEY` | Windy Webcams | fallback live city webcams | $0 | api.windy.com |
+| `NEXT_PUBLIC_SUPABASE_URL` | Supabase | long-term conversation + fact memory | $0 | supabase.com |
+| `SUPABASE_SERVICE_ROLE_KEY` | Supabase | server-side write access for the same memory store | $0 | supabase.com → Project Settings → API |
+| `SUPABASE_ANON_KEY` | Supabase | (reserved for any future client-side reads) | $0 | supabase.com → Project Settings → API |
+| `NEXT_PUBLIC_CESIUM_ION_TOKEN` | Cesium ion | optional — only needed for ion-hosted terrain/imagery add-ons | $0 | cesium.com/ion |
 
-To learn more about Next.js, take a look at the following resources:
+Two integrations need a little more than just an API key:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- **YouTube live cams** (`YOUTUBE_API_KEY`, not yet wired into `.env.local`):
+  without it, the cam system silently skips straight to the Windy webcam
+  fallback. Add the key to enable real YouTube live-stream search.
+- **OpenAQ air quality** (`OPENAQ_KEY`): OpenAQ's v3 API now requires a free
+  key. Without it, the info panel shows "N/V" instead of a number.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Supabase memory tables
 
-## Deploy on Vercel
+This project only has Supabase's API keys, not a database password, so the
+schema can't be applied by a script. Once, paste the contents of
+[`supabase/schema.sql`](supabase/schema.sql) into your Supabase project's
+SQL Editor and run it. Until you do, memory persistence is a silent no-op
+(Jarvis still works, it just won't remember past sessions).
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Voice control
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Say **"Jarvis"** from any view to wake it up, then speak your command.
+- While Jarvis is talking, saying **"Jarvis"** again barges in and cuts off
+  the current sentence so you can give a new command immediately.
+- Jarvis replies in whichever language you spoke to it (German/English).
+
+## Keyboard shortcuts
+
+| Key | Action |
+|---|---|
+| `1`–`6` | Jump to Command Center / Globe / Markets / Pipeline / Morning / Voice |
+| `r` | Toggle auto-rotation (cycles the 5 dashboard views every 8s) |
+
+(Shortcuts are ignored while typing in a text field.)
+
+## Building the desktop app
+
+```bash
+npm run dist
+```
+
+Runs `next build` then `electron-builder` (config lives in the `build` key
+of `package.json`) producing an NSIS installer on Windows, a `.dmg` on
+macOS, or an AppImage on Linux into `electron-dist/`. The packaged app
+spawns its own `next start` server on launch — make sure `.env.local` sits
+next to the installed app (or set the same variables as real environment
+variables) since secrets are intentionally not bundled into the build.
+
+## Project structure
+
+- `app/(views)/*` — each dashboard view (one route per screen)
+- `components/views/*` — the view implementations
+- `components/hud/*` — shared chrome (panels, status bar, ticker, scanlines, transitions)
+- `lib/*` — voice engine, Claude intent system, geocoding, memory, metrics, etc.
+- `app/api/*` — server routes proxying the third-party APIs above
+- `electron/*` — the desktop shell (main process + preload bridge)

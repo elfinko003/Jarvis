@@ -54,7 +54,7 @@ export function VoiceOrb({ status, amplitudeRef }: VoiceOrbProps) {
   }, [status, amplitudeRef]);
 
   return (
-    <div className="relative h-[280px] w-[280px]">
+    <div className="relative h-[180px] w-[180px] sm:h-[220px] sm:w-[220px] lg:h-[280px] lg:w-[280px]">
       {RINGS.map((ring, i) => (
         <div
           key={i}

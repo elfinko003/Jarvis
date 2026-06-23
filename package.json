@@ -44,6 +44,7 @@
   "build": {
     "appId": "com.fathmaker.jarvis",
     "productName": "JARVIS",
+    "asar": false,
     "directories": {
       "output": "electron-dist"
     },
