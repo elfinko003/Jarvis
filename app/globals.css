@@ -197,6 +197,23 @@ body {
   }
 }
 
+/* Voice orb rings */
+.voice-ring {
+  animation-name: spin-360;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  will-change: transform;
+}
+
+@keyframes spin-360 {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .boot-cursor::after {
   content: "▌";
   margin-left: 4px;
