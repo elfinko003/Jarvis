@@ -1,17 +1,34 @@
 {
-  "name": "jarvis-tmp",
+  "name": "jarvis",
   "version": "0.1.0",
   "private": true,
+  "main": "electron/main.js",
   "scripts": {
-    "dev": "next dev",
+    "dev:next": "next dev",
+    "dev:electron": "wait-on http://localhost:3000 && electron .",
+    "dev": "concurrently -k -n NEXT,ELECTRON -c blue,yellow \"npm:dev:next\" \"npm:dev:electron\"",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "dist": "next build && electron-builder"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.105.0",
+    "@supabase/supabase-js": "^2.108.2",
+    "cesium": "^1.142.0",
+    "concurrently": "^10.0.3",
+    "electron": "^42.4.1",
+    "electron-builder": "^26.15.3",
+    "framer-motion": "^12.40.0",
+    "lightweight-charts": "^5.2.0",
     "next": "16.2.9",
     "react": "19.2.4",
-    "react-dom": "19.2.4"
+    "react-dom": "19.2.4",
+    "react-force-graph-3d": "^1.29.1",
+    "recharts": "^3.8.1",
+    "resium": "^1.23.0",
+    "three": "^0.184.0",
+    "wait-on": "^9.0.10"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
@@ -22,5 +39,27 @@
     "eslint-config-next": "16.2.9",
     "tailwindcss": "^4",
     "typescript": "^5"
+  },
+  "build": {
+    "appId": "com.fathmaker.jarvis",
+    "productName": "JARVIS",
+    "directories": {
+      "output": "electron-dist"
+    },
+    "files": [
+      "electron/**/*",
+      ".next/**/*",
+      "public/**/*",
+      "package.json"
+    ],
+    "win": {
+      "target": "nsis"
+    },
+    "mac": {
+      "target": "dmg"
+    },
+    "linux": {
+      "target": "AppImage"
+    }
   }
 }

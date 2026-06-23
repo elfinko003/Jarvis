@@ -1,26 +1,141 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg-black: #0a0a0c;
+  --bg-panel: #121216;
+  --bg-panel-2: #18181d;
+  --border-dim: #2a2a30;
+
+  --orange: #ff4500;
+  --orange-bright: #ff6b1a;
+  --orange-dim: #7a2800;
+
+  --green: #00ff88;
+  --green-dim: #1a7a4a;
+
+  --red: #ff3344;
+  --blue: #4a9eff;
+
+  --text-bright: #e8e8ec;
+  --text-dim: #6a6a72;
+  --text-faint: #3a3a42;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-bg-black: var(--bg-black);
+  --color-bg-panel: var(--bg-panel);
+  --color-bg-panel-2: var(--bg-panel-2);
+  --color-border-dim: var(--border-dim);
+
+  --color-orange: var(--orange);
+  --color-orange-bright: var(--orange-bright);
+  --color-orange-dim: var(--orange-dim);
+
+  --color-green: var(--green);
+  --color-green-dim: var(--green-dim);
+
+  --color-red: var(--red);
+  --color-blue: var(--blue);
+
+  --color-text-bright: var(--text-bright);
+  --color-text-dim: var(--text-dim);
+  --color-text-faint: var(--text-faint);
+
+  --font-display: var(--font-orbitron);
+  --font-heading: var(--font-rajdhani);
+  --font-mono: var(--font-jetbrains-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  background: var(--bg-black);
+  color: var(--text-bright);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-black);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-dim);
+}
+
+/* ScanLines overlay */
+.scanlines-overlay {
+  background-image: repeating-linear-gradient(
+    0deg,
+    rgba(255, 255, 255, 0.9) 0px,
+    rgba(255, 255, 255, 0.9) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  animation: scanlines-move 8s linear infinite;
+  will-change: background-position;
+}
+
+@keyframes scanlines-move {
+  from {
+    background-position-y: 0;
+  }
+  to {
+    background-position-y: 12px;
+  }
+}
+
+/* Ticker marquee */
+.ticker-track {
+  animation: marquee-scroll 38s linear infinite;
+  will-change: transform;
+}
+
+@keyframes marquee-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* JarvisLayout ambient particles */
+.jarvis-particles {
+  opacity: 0.5;
+  background-repeat: no-repeat;
+  background-image: radial-gradient(1px 1px at 10% 20%, rgba(255, 107, 26, 0.5) 0, transparent 60%),
+    radial-gradient(1px 1px at 30% 70%, rgba(255, 107, 26, 0.35) 0, transparent 60%),
+    radial-gradient(1px 1px at 60% 15%, rgba(255, 107, 26, 0.4) 0, transparent 60%),
+    radial-gradient(1px 1px at 80% 60%, rgba(255, 107, 26, 0.3) 0, transparent 60%),
+    radial-gradient(1px 1px at 45% 85%, rgba(255, 107, 26, 0.35) 0, transparent 60%),
+    radial-gradient(1px 1px at 92% 30%, rgba(255, 107, 26, 0.3) 0, transparent 60%);
+  animation: particles-drift 40s linear infinite;
+  will-change: background-position;
+}
+
+@keyframes particles-drift {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 40px -60px;
+  }
 }
