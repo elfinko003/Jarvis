@@ -286,3 +286,16 @@ body {
     transform: translateY(-50%);
   }
 }
+
+@keyframes scan-line-sweep {
+  from {
+    top: 0%;
+  }
+  to {
+    top: 100%;
+  }
+}
+
+.scan-line {
+  animation: scan-line-sweep 6s linear infinite;
+}
