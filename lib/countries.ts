@@ -67,3 +67,33 @@ export function findCountry(query: string): CountryInfo | null {
 export function getDefaultCountry(): CountryInfo {
   return findCountry(DEFAULT_COUNTRY) ?? COUNTRIES[0];
 }
+
+export function findCountryByCca2(cca2: string): CountryInfo | null {
+  const needle = cca2.toLowerCase();
+  return COUNTRIES.find((c) => c.cca2 === needle) ?? null;
+}
+
+// Flag emojis are pure Unicode (each letter of an ISO 3166-1 alpha-2 code
+// maps to a regional-indicator symbol) — no API or dataset needed, works
+// for literally any country code.
+const CURRENCY_BY_CCA2: Record<string, string> = {
+  de: "EUR", at: "EUR", ch: "CHF", fr: "EUR", gb: "GBP", it: "EUR", es: "EUR",
+  nl: "EUR", be: "EUR", pl: "PLN", se: "SEK", no: "NOK", dk: "DKK", fi: "EUR",
+  ru: "RUB", ua: "UAH", us: "USD", ca: "CAD", mx: "MXN", br: "BRL", ar: "ARS",
+  jp: "JPY", cn: "CNY", kr: "KRW", in: "INR", au: "AUD", nz: "NZD", eg: "EGP",
+  za: "ZAR", tr: "TRY", gr: "EUR", pt: "EUR", ie: "EUR",
+};
+
+export function currencyForCca2(cca2: string | null): string {
+  if (!cca2) return "—";
+  return CURRENCY_BY_CCA2[cca2.toLowerCase()] ?? "—";
+}
+
+export function flagEmoji(countryCode: string | null): string {
+  if (!countryCode || countryCode.length !== 2) return "🏳";
+  const codePoints = countryCode
+    .toUpperCase()
+    .split("")
+    .map((c) => 0x1f1e6 - 65 + c.charCodeAt(0));
+  return String.fromCodePoint(...codePoints);
+}

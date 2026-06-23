@@ -119,6 +119,57 @@ export function startWakeWordListening(onWake: () => void): WakeWordHandle {
   };
 }
 
+// --- Barge-in (listens for "Jarvis" while TTS is playing) -------------------
+
+// Runs a separate recognizer concurrently with audio playback. Only an
+// utterance starting with the wake word counts as a real interruption —
+// anything else is background noise/conversation Jarvis should keep
+// talking through.
+export function startBargeInListening(onBargeIn: () => void): WakeWordHandle {
+  const Ctor = getSpeechRecognitionCtor();
+  if (!Ctor) return { stop: () => {} };
+
+  const recognition = new Ctor();
+  recognition.continuous = true;
+  recognition.interimResults = true;
+  recognition.lang = "de-DE";
+
+  let stopped = false;
+  let triggered = false;
+
+  recognition.onresult = (event) => {
+    const transcript = resultsToText(event.results).toLowerCase().trim();
+    if (!triggered && WAKE_WORDS.some((w) => transcript.startsWith(w))) {
+      triggered = true;
+      onBargeIn();
+    }
+  };
+
+  recognition.onerror = () => {};
+  recognition.onend = () => {
+    if (stopped || triggered) return;
+    try {
+      recognition.start();
+    } catch {
+      // ignore double-start races
+    }
+  };
+
+  try {
+    recognition.start();
+  } catch {
+    // ignore
+  }
+
+  return {
+    stop: () => {
+      stopped = true;
+      recognition.onend = null;
+      recognition.stop();
+    },
+  };
+}
+
 // --- Single command capture -------------------------------------------------
 
 export function startCommandListening(): Promise<string> {
@@ -210,7 +261,7 @@ async function synthesizeSpeech(text: string): Promise<string | null> {
   }
 }
 
-function playAudioWithAmplitude(url: string, onAmplitude?: AmplitudeCallback): Promise<void> {
+function playAudioWithAmplitude(url: string, onAmplitude?: AmplitudeCallback, signal?: AbortSignal): Promise<void> {
   return new Promise((resolve) => {
     const audio = new Audio(url);
     let raf = 0;
@@ -229,6 +280,14 @@ function playAudioWithAmplitude(url: string, onAmplitude?: AmplitudeCallback): P
       cleanup();
       resolve();
     });
+
+    if (signal) {
+      signal.addEventListener("abort", () => {
+        audio.pause();
+        cleanup();
+        resolve();
+      });
+    }
 
     if (onAmplitude) {
       try {
@@ -262,7 +321,7 @@ function playAudioWithAmplitude(url: string, onAmplitude?: AmplitudeCallback): P
   });
 }
 
-function speakWithBrowserFallback(text: string, onAmplitude?: AmplitudeCallback): Promise<void> {
+function speakWithBrowserFallback(text: string, onAmplitude?: AmplitudeCallback, signal?: AbortSignal): Promise<void> {
   return new Promise((resolve) => {
     if (typeof window === "undefined" || !window.speechSynthesis) {
       resolve();
@@ -290,17 +349,26 @@ function speakWithBrowserFallback(text: string, onAmplitude?: AmplitudeCallback)
 
     utterance.onend = finish;
     utterance.onerror = finish;
+    if (signal) {
+      signal.addEventListener("abort", () => {
+        window.speechSynthesis.cancel();
+        finish();
+      });
+    }
     window.speechSynthesis.speak(utterance);
   });
 }
 
 // Tries ElevenLabs (via /api/tts) first, falls back to window.speechSynthesis.
-// onAmplitude is fed live playback levels for the orb animation.
-export async function speak(text: string, onAmplitude?: AmplitudeCallback): Promise<void> {
+// onAmplitude is fed live playback levels for the orb animation. Pass a
+// signal so a "Jarvis…" barge-in can cut playback short.
+export async function speak(text: string, onAmplitude?: AmplitudeCallback, signal?: AbortSignal): Promise<void> {
+  if (signal?.aborted) return;
   const audioUrl = await synthesizeSpeech(text);
+  if (signal?.aborted) return;
   if (audioUrl) {
-    await playAudioWithAmplitude(audioUrl, onAmplitude);
+    await playAudioWithAmplitude(audioUrl, onAmplitude, signal);
     return;
   }
-  await speakWithBrowserFallback(text, onAmplitude);
+  await speakWithBrowserFallback(text, onAmplitude, signal);
 }

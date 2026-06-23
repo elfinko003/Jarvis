@@ -1,10 +1,5 @@
-import { Suspense } from "react";
-import { WorldGlobeView } from "@/components/views/WorldGlobeView";
+import { PlaceExplorerView } from "@/components/views/PlaceExplorerView";
 
 export default function WorldGlobePage() {
-  return (
-    <Suspense fallback={null}>
-      <WorldGlobeView />
-    </Suspense>
-  );
+  return <PlaceExplorerView />;
 }
