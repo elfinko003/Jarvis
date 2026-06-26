@@ -30,7 +30,7 @@ function CamTile({ cam, isThrottled }: { cam: CamState; isThrottled: boolean }) 
   const showLiveVideo = cam.sourceType === "youtube" && !isThrottled;
 
   return (
-    <div className="relative h-full w-full overflow-hidden rounded-[2px] border border-border-dim bg-bg-panel-2">
+    <div className="relative h-full w-full overflow-hidden rounded-xl border border-white/[0.08] bg-bg-panel-2">
       {showLiveVideo && cam.videoId ? (
         <iframe
           key={cam.soundOn ? "unmuted" : "muted"}
@@ -50,17 +50,17 @@ function CamTile({ cam, isThrottled }: { cam: CamState; isThrottled: boolean }) 
         // eslint-disable-next-line @next/next/no-img-element
         <img src={cam.imageUrl} alt="" className="h-full w-full object-cover opacity-85" />
       ) : (
-        <div className="flex h-full w-full items-center justify-center [background:linear-gradient(135deg,#1a1a1f,#0a0a0c)]">
-          <p className="font-mono text-[10px] uppercase tracking-[1px] text-text-faint">▸ KEIN SIGNAL</p>
+        <div className="flex h-full w-full items-center justify-center [background:linear-gradient(135deg,#0d1220,#05070e)]">
+          <p className="font-mono text-[10px] uppercase tracking-[1px] text-text-faint">Kein Signal</p>
         </div>
       )}
 
-      <span className="absolute left-2 top-2 flex items-center gap-1.5 rounded-[2px] bg-bg-black/85 px-2 py-1 font-mono text-[10px] uppercase tracking-[1px] text-text-bright">
-        <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-red" />● LIVE · {cam.place.toUpperCase()}
+      <span className="glass-surface absolute left-2 top-2 flex items-center gap-1.5 rounded-full px-2.5 py-1 font-mono text-[10px] uppercase tracking-[1px] text-text-bright">
+        <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-red" />LIVE · {cam.place.toUpperCase()}
         {cam.actualPlace && <span className="text-text-faint">(nächste: {cam.actualPlace})</span>}
       </span>
 
-      <span className="absolute bottom-2 right-2 rounded-[2px] bg-bg-black/85 px-1.5 py-0.5 font-mono text-[8px] uppercase tracking-[1px] text-text-faint">
+      <span className="glass-surface absolute bottom-2 right-2 rounded-full px-2 py-0.5 font-mono text-[8px] uppercase tracking-[1px] text-text-faint">
         {cam.sourceType === "youtube" ? "YOUTUBE" : cam.sourceType === "windy" ? "WEBCAM" : "—"}
         {cam.soundOn && cam.sourceType === "youtube" ? " · 🔊" : " · 🔇"}
       </span>

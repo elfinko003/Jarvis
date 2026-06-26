@@ -17,8 +17,8 @@ export function MorningTypewriter() {
   }, []);
 
   return (
-    <p className="boot-cursor font-display text-2xl font-black uppercase tracking-[2px] text-orange [text-shadow:0_0_12px_var(--orange)]">
-      &gt; {TEXT.slice(0, visibleCount)}
+    <p className="boot-cursor text-2xl font-light tracking-[1px] text-text-bright">
+      {TEXT.slice(0, visibleCount)}
     </p>
   );
 }

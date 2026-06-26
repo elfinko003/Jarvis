@@ -258,7 +258,7 @@ export function PlaceExplorerView() {
   return (
     <JarvisLayout module="ORTS-EXPLORER // LIVE">
       <div className="flex h-full gap-3">
-        <div className="relative h-full min-w-0 flex-1 overflow-hidden rounded-[2px] border border-border-dim">
+        <div className="relative h-full min-w-0 flex-1 overflow-hidden rounded-2xl border border-white/[0.06]">
           {showCams ? (
             <CamGrid cams={cams} fullscreenPlace={fullscreenPlace} />
           ) : (

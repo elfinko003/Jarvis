@@ -19,12 +19,12 @@ export function MarketHeatmap({ entries }: MarketHeatmapProps) {
         return (
           <div
             key={entry.symbol}
-            className="flex flex-col items-center justify-center rounded-[2px] border py-2"
+            className="flex flex-col items-center justify-center rounded-lg border py-2"
             style={{
               borderColor: isUp ? "var(--green-dim)" : "var(--red)",
               backgroundColor: isUp
-                ? `rgba(0, 255, 136, ${0.08 + intensity * 0.18})`
-                : `rgba(255, 51, 68, ${0.08 + intensity * 0.18})`,
+                ? `rgba(86, 224, 160, ${0.06 + intensity * 0.14})`
+                : `rgba(255, 90, 106, ${0.06 + intensity * 0.14})`,
             }}
           >
             <span className="font-mono text-[10px] uppercase tracking-[1px] text-text-bright">{entry.symbol}</span>

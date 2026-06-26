@@ -10,7 +10,7 @@ interface MarketIndexTileProps {
 export function MarketIndexTile({ symbol, price, change, decimals = 2 }: MarketIndexTileProps) {
   const isUp = change >= 0;
   return (
-    <div className="flex-1 rounded-[2px] border border-border-dim p-3 [background:linear-gradient(160deg,var(--bg-panel),#0d0d10)]">
+    <div className="glass-surface flex-1 rounded-xl p-3">
       <p className="font-mono text-[9px] uppercase tracking-[2px] text-text-dim">{symbol}</p>
       <GlowText className="font-mono text-xl text-text-bright">
         {price.toLocaleString("de-DE", { minimumFractionDigits: decimals, maximumFractionDigits: decimals })}

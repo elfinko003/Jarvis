@@ -1,24 +1,35 @@
 @import "tailwindcss";
 
 :root {
-  --bg-black: #0a0a0c;
-  --bg-panel: #121216;
-  --bg-panel-2: #18181d;
-  --border-dim: #2a2a30;
+  /* Clean cinematic dark palette (UPDATE 1 — orange retired). Legacy
+     variable names are kept so existing Tailwind utility classes
+     (text-orange, bg-bg-panel, border-border-dim, ...) don't need to be
+     renamed everywhere; they now resolve to the new calm/glass values. */
+  --bg-black: #05070e;
+  --bg-panel: #0a0e18;
+  --bg-panel-2: #0d1220;
+  --border-dim: rgba(255, 255, 255, 0.1);
 
-  --orange: #ff4500;
-  --orange-bright: #ff6b1a;
-  --orange-dim: #7a2800;
+  --glass: rgba(255, 255, 255, 0.045);
+  --glass-brd: rgba(255, 255, 255, 0.1);
 
-  --green: #00ff88;
-  --green-dim: #1a7a4a;
+  /* "orange" now means "accent" — a sparse, cool highlight, not a loud hue */
+  --orange: #bfe0ff;
+  --orange-bright: #d8ecff;
+  --orange-dim: #5c7da3;
 
-  --red: #ff3344;
-  --blue: #4a9eff;
+  /* reserved for globe atmosphere/markers only — kept out of UI chrome */
+  --warm: #ffb066;
 
-  --text-bright: #e8e8ec;
-  --text-dim: #6a6a72;
-  --text-faint: #3a3a42;
+  --green: #56e0a0;
+  --green-dim: #2d7a5c;
+
+  --red: #ff5a6a;
+  --blue: #bfe0ff;
+
+  --text-bright: #eef1f6;
+  --text-dim: #838b9e;
+  --text-faint: #4a5161;
 }
 
 @theme inline {
@@ -27,9 +38,13 @@
   --color-bg-panel-2: var(--bg-panel-2);
   --color-border-dim: var(--border-dim);
 
+  --color-glass: var(--glass);
+  --color-glass-brd: var(--glass-brd);
+
   --color-orange: var(--orange);
   --color-orange-bright: var(--orange-bright);
   --color-orange-dim: var(--orange-dim);
+  --color-warm: var(--warm);
 
   --color-green: var(--green);
   --color-green-dim: var(--green-dim);
@@ -41,8 +56,9 @@
   --color-text-dim: var(--text-dim);
   --color-text-faint: var(--text-faint);
 
-  --font-display: var(--font-orbitron);
-  --font-heading: var(--font-rajdhani);
+  --font-sans: var(--font-inter);
+  --font-display: var(--font-inter);
+  --font-heading: var(--font-inter);
   --font-mono: var(--font-jetbrains-mono);
 }
 
@@ -80,12 +96,12 @@ body {
   background: var(--border-dim);
 }
 
-/* ScanLines overlay */
+/* ScanLines overlay — barely-there texture, not a retro CRT effect anymore */
 .scanlines-overlay {
   background-image: repeating-linear-gradient(
     0deg,
-    rgba(255, 255, 255, 0.9) 0px,
-    rgba(255, 255, 255, 0.9) 1px,
+    rgba(255, 255, 255, 0.06) 0px,
+    rgba(255, 255, 255, 0.06) 1px,
     transparent 1px,
     transparent 3px
   );
@@ -117,16 +133,16 @@ body {
   }
 }
 
-/* JarvisLayout ambient particles */
+/* JarvisLayout ambient particles — faint and neutral, not a glowing orange field */
 .jarvis-particles {
-  opacity: 0.5;
+  opacity: 0.3;
   background-repeat: no-repeat;
-  background-image: radial-gradient(1px 1px at 10% 20%, rgba(255, 107, 26, 0.5) 0, transparent 60%),
-    radial-gradient(1px 1px at 30% 70%, rgba(255, 107, 26, 0.35) 0, transparent 60%),
-    radial-gradient(1px 1px at 60% 15%, rgba(255, 107, 26, 0.4) 0, transparent 60%),
-    radial-gradient(1px 1px at 80% 60%, rgba(255, 107, 26, 0.3) 0, transparent 60%),
-    radial-gradient(1px 1px at 45% 85%, rgba(255, 107, 26, 0.35) 0, transparent 60%),
-    radial-gradient(1px 1px at 92% 30%, rgba(255, 107, 26, 0.3) 0, transparent 60%);
+  background-image: radial-gradient(1px 1px at 10% 20%, rgba(255, 255, 255, 0.3) 0, transparent 60%),
+    radial-gradient(1px 1px at 30% 70%, rgba(255, 255, 255, 0.2) 0, transparent 60%),
+    radial-gradient(1px 1px at 60% 15%, rgba(255, 255, 255, 0.25) 0, transparent 60%),
+    radial-gradient(1px 1px at 80% 60%, rgba(255, 255, 255, 0.18) 0, transparent 60%),
+    radial-gradient(1px 1px at 45% 85%, rgba(255, 255, 255, 0.2) 0, transparent 60%),
+    radial-gradient(1px 1px at 92% 30%, rgba(255, 255, 255, 0.18) 0, transparent 60%);
   animation: particles-drift 40s linear infinite;
   will-change: background-position;
 }
@@ -242,7 +258,7 @@ body {
 
 /* Command Center: radar sweep */
 .radar-sweep {
-  background: conic-gradient(from 0deg, rgba(255, 69, 0, 0.45), transparent 35%, transparent 100%);
+  background: conic-gradient(from 0deg, rgba(191, 224, 255, 0.25), transparent 35%, transparent 100%);
   animation: radar-spin 6s linear infinite;
   will-change: transform;
   mix-blend-mode: screen;
@@ -301,4 +317,46 @@ body {
 .scan-line {
   animation: scan-line-sweep 6s linear infinite;
   will-change: top;
+}
+
+/* Shared glass surface — Panel and VoiceBubble both build on this */
+.glass-surface {
+  background: var(--glass);
+  border: 1px solid var(--glass-brd);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+/* VoiceBubble: soft breathing ring around the mic icon */
+.mic-pulse-ring {
+  animation: mic-pulse 2.6s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
+@keyframes mic-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.5;
+  }
+  50% {
+    transform: scale(1.35);
+    opacity: 0;
+  }
+}
+
+/* VoiceBubble: waveform bars */
+.wave-bar {
+  animation: wave-bounce 1s ease-in-out infinite;
+  will-change: transform;
+}
+
+@keyframes wave-bounce {
+  0%,
+  100% {
+    transform: scaleY(0.3);
+  }
+  50% {
+    transform: scaleY(1);
+  }
 }

@@ -12,7 +12,7 @@ export function ReactorCore() {
   return (
     <Panel title="REAKTOR // CORE" rightText="ONLINE" className="flex h-full flex-col items-center">
       <div className="relative mt-2 flex aspect-square w-full max-w-[260px] items-center justify-center">
-        <div className="pointer-events-none absolute inset-0 rounded-full [background:radial-gradient(circle,rgba(255,69,0,0.35),rgba(255,69,0,0.05)_55%,transparent_75%)] blur-md" />
+        <div className="pointer-events-none absolute inset-0 rounded-full [background:radial-gradient(circle,rgba(191,224,255,0.2),rgba(191,224,255,0.04)_55%,transparent_75%)] blur-md" />
 
         <div
           className="spin-loop absolute inset-[4%] rounded-full"
@@ -71,12 +71,12 @@ export function ReactorCore() {
         </span>
 
         <div className="absolute inset-[28%] flex items-center justify-center">
-          <svg viewBox="0 0 200 200" className="h-full w-full [filter:drop-shadow(0_0_14px_var(--orange))]">
+          <svg viewBox="0 0 200 200" className="h-full w-full [filter:drop-shadow(0_0_10px_rgba(191,224,255,0.25))]">
             <polygon
               points={HEX_POINTS}
-              fill="rgba(255,69,0,0.12)"
+              fill="rgba(191,224,255,0.06)"
               stroke="var(--orange-bright)"
-              strokeWidth={2}
+              strokeWidth={1.2}
             />
           </svg>
         </div>

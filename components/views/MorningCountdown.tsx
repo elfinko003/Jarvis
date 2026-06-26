@@ -22,8 +22,8 @@ function elapsedSinceDayStart(): { h: number; m: number; s: number } {
   return { h: Math.floor(totalSeconds / 3600), m: Math.floor((totalSeconds % 3600) / 60), s: totalSeconds % 60 };
 }
 
-// Approximates a 7-segment LED readout with tabular-nums + a heavy glow —
-// no real segment font is bundled, this is the closest a system font gets.
+// Tabular-nums readout — the heavy multi-layer LED glow is gone (UPDATE 1),
+// just clean bright digits with a faint lift.
 export function MorningCountdown() {
   const [elapsed, setElapsed] = useState({ h: 0, m: 0, s: 0 });
 
@@ -35,8 +35,8 @@ export function MorningCountdown() {
 
   return (
     <div className="text-center">
-      <p className="font-mono text-[10px] uppercase tracking-[3px] text-text-dim">SEIT TAGESSTART</p>
-      <p className="font-mono text-7xl font-bold tabular-nums text-orange [text-shadow:0_0_6px_var(--orange),0_0_22px_var(--orange),0_0_44px_var(--orange-dim)]">
+      <p className="font-mono text-[10px] uppercase tracking-[3px] text-text-faint">Seit Tagesstart</p>
+      <p className="font-mono text-7xl font-light tabular-nums text-text-bright [text-shadow:0_0_24px_rgba(255,255,255,0.1)]">
         {pad(elapsed.h)}:{pad(elapsed.m)}:{pad(elapsed.s)}
       </p>
     </div>

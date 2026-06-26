@@ -1,5 +1,4 @@
 import type { ReactNode } from "react";
-import { HudCorner } from "./HudCorner";
 import { Eyebrow } from "./Eyebrow";
 
 interface PanelProps {
@@ -11,11 +10,8 @@ interface PanelProps {
 
 export function Panel({ title, rightText, className, children }: PanelProps) {
   return (
-    <div
-      className={`relative overflow-hidden rounded-[2px] border border-border-dim p-3.5 [background:linear-gradient(160deg,var(--bg-panel),#0d0d10)] ${className ?? ""}`}
-    >
-      <HudCorner />
-      {title && <Eyebrow text={title} rightText={rightText} className="mb-2.5" />}
+    <div className={`glass-surface relative overflow-hidden rounded-2xl p-4 ${className ?? ""}`}>
+      {title && <Eyebrow text={title} rightText={rightText} className="mb-3" />}
       {children}
     </div>
   );

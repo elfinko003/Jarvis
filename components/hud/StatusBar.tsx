@@ -38,39 +38,24 @@ export function StatusBar() {
   const year = now.getFullYear();
 
   return (
-    <div className="flex items-center gap-4 font-mono">
-      <div className="flex items-end gap-3 border-r border-border-dim pr-4">
-        <span
-          suppressHydrationWarning
-          className="font-display text-[34px] font-black leading-none text-orange [text-shadow:0_0_10px_var(--orange)]"
-        >
-          {day}
+    <div className="glass-surface flex items-center gap-4 rounded-full px-4 py-1.5 font-mono">
+      <div className="flex flex-col leading-tight">
+        <span suppressHydrationWarning className="text-[11px] tracking-[1px] text-text-bright">
+          {time}
         </span>
-        <div className="flex flex-col gap-0.5 pb-0.5 leading-tight">
-          <span suppressHydrationWarning className="text-[11px] tracking-[2px] text-text-bright">
-            {time}
-          </span>
-          <span suppressHydrationWarning className="text-[9px] tracking-[2px] text-text-dim">
-            {month} · {year}
-          </span>
-        </div>
+        <span suppressHydrationWarning className="text-[9px] tracking-[1px] text-text-faint">
+          {day} {month} {year}
+        </span>
       </div>
 
-      <div className="flex flex-col items-end gap-1 pb-0.5">
-        <span className="text-[9px] tracking-[2px] text-text-dim">LAT: 14ms</span>
-        <div className="flex items-end gap-[2px]">
-          {SIGNAL_BAR_HEIGHTS.map((height, i) => (
-            <span
-              key={i}
-              style={{ height }}
-              className={
-                i < ACTIVE_SIGNAL_BARS
-                  ? "w-[3px] bg-orange shadow-[0_0_4px_var(--orange)]"
-                  : "w-[3px] bg-text-faint"
-              }
-            />
-          ))}
-        </div>
+      <div className="flex items-end gap-[2px] border-l border-white/[0.08] pl-3">
+        {SIGNAL_BAR_HEIGHTS.map((height, i) => (
+          <span
+            key={i}
+            style={{ height }}
+            className={i < ACTIVE_SIGNAL_BARS ? "w-[3px] rounded-full bg-text-dim" : "w-[3px] rounded-full bg-text-faint"}
+          />
+        ))}
       </div>
     </div>
   );

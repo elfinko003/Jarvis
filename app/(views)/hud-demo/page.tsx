@@ -60,7 +60,7 @@ export default function HudDemoPage() {
           </div>
         </Panel>
 
-        <div className="relative h-full overflow-hidden rounded-[2px] border border-border-dim p-3.5">
+        <div className="glass-surface relative h-full overflow-hidden rounded-2xl p-4">
           <HudCorner />
           <Eyebrow text="ROHE HUDCORNER // OHNE PANEL" rightText="REF" />
           <p className="mt-3 font-mono text-[11px] text-text-dim">

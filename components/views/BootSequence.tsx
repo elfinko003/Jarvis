@@ -96,7 +96,7 @@ export function BootSequence() {
     >
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 z-0 [background:radial-gradient(circle_at_50%_45%,rgba(255,69,0,0.08),transparent_60%)]"
+        className="pointer-events-none absolute inset-0 z-0 [background:radial-gradient(circle_at_50%_45%,rgba(191,224,255,0.06),transparent_60%)]"
       />
       <ScanLines />
 

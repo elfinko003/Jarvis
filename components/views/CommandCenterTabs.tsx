@@ -22,10 +22,10 @@ export function CommandCenterTabs() {
           <Link
             key={tab.href}
             href={tab.href}
-            className={`border-b-2 pb-1 font-mono text-[11px] uppercase tracking-[2px] transition-colors ${
+            className={`border-b pb-1 font-mono text-[11px] uppercase tracking-[2px] transition-colors ${
               active
-                ? "border-orange text-orange [text-shadow:0_0_8px_var(--orange)]"
-                : "border-transparent text-text-dim hover:text-orange-bright"
+                ? "border-text-bright text-text-bright"
+                : "border-transparent text-text-faint hover:text-text-dim"
             }`}
           >
             {tab.label}

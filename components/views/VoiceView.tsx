@@ -26,7 +26,7 @@ export function VoiceView() {
     <div className="relative flex h-screen w-screen flex-col items-center justify-between overflow-hidden bg-bg-black px-6 py-10 text-text-bright">
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 z-0 [background:radial-gradient(circle_at_50%_45%,rgba(74,158,255,0.10),transparent_60%)]"
+        className="pointer-events-none absolute inset-0 z-0 [background:radial-gradient(circle_at_50%_45%,rgba(191,224,255,0.06),transparent_60%)]"
       />
       <ScanLines />
 
@@ -37,7 +37,7 @@ export function VoiceView() {
       <span className="pointer-events-none absolute right-0 top-1/2 h-px w-2 -translate-y-1/2 bg-blue/50" />
 
       <header className="relative z-10 flex flex-col items-center gap-1 text-center">
-        <h1 className="font-display text-lg font-black uppercase tracking-[8px] text-blue [text-shadow:0_0_14px_var(--blue)]">
+        <h1 className="text-lg font-light uppercase tracking-[8px] text-text-bright">
           J.A.R.V.I.S
         </h1>
         <p className="text-[10px] uppercase tracking-[3px] text-blue/60">
@@ -74,7 +74,7 @@ export function VoiceView() {
       <div className="absolute bottom-4 right-4 z-10 flex gap-1.5">
         <button
           onClick={() => setOverride(null)}
-          className={`rounded-[2px] border px-2 py-1 font-mono text-[9px] uppercase tracking-[1px] transition-colors ${
+          className={`rounded-lg border px-2 py-1 font-mono text-[9px] uppercase tracking-[1px] transition-colors ${
             isLive
               ? "border-green bg-green/15 text-green"
               : "border-border-dim text-text-faint hover:border-green/40 hover:text-green/70"
@@ -86,7 +86,7 @@ export function VoiceView() {
           <button
             key={s}
             onClick={() => setOverride(s)}
-            className={`rounded-[2px] border px-2 py-1 font-mono text-[9px] uppercase tracking-[1px] transition-colors ${
+            className={`rounded-lg border px-2 py-1 font-mono text-[9px] uppercase tracking-[1px] transition-colors ${
               override === s
                 ? "border-blue bg-blue/15 text-blue"
                 : "border-border-dim text-text-faint hover:border-blue/40 hover:text-blue/70"

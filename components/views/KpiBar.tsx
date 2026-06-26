@@ -25,7 +25,7 @@ function KpiTile({ kpi }: { kpi: Kpi }) {
   return (
     <Panel className="flex-1">
       <p className="font-mono text-[10px] uppercase tracking-[2px] text-text-dim">{kpi.label}</p>
-      <p className="mt-1 font-display text-2xl font-black text-orange [text-shadow:0_0_10px_var(--orange)]">
+      <p className="mt-1 text-2xl font-light text-text-bright">
         {formatted}
         {kpi.suffix}
       </p>

@@ -7,7 +7,7 @@ import { EVENTS, timeToMinutes } from "@/lib/events";
 const CATEGORY_COLOR: Record<string, string> = {
   orange: "var(--orange-bright)",
   green: "var(--green)",
-  salmon: "#fa8072",
+  salmon: "#e8a48c",
 };
 
 const DAY_START_MIN = Math.min(...EVENTS.map((e) => timeToMinutes(e.start)));
@@ -37,7 +37,7 @@ export function MorningTimeline() {
       <div className="relative min-h-0 flex-1 space-y-2.5 overflow-y-auto">
         {nowPercent !== null && (
           <div
-            className="pointer-events-none absolute top-0 z-10 h-full w-px bg-orange shadow-[0_0_6px_var(--orange)]"
+            className="pointer-events-none absolute top-0 z-10 h-full w-px bg-text-bright/40"
             style={{ left: `${nowPercent}%` }}
           />
         )}
@@ -53,14 +53,13 @@ export function MorningTimeline() {
                 </p>
                 <p className="font-mono text-[11px] text-text-bright">{event.title}</p>
               </div>
-              <div className="relative h-5 flex-1 rounded-[2px] bg-bg-panel-2">
+              <div className="relative h-5 flex-1 rounded-md bg-bg-panel-2">
                 <div
-                  className="absolute top-0 h-full rounded-[2px]"
+                  className="absolute top-0 h-full rounded-md opacity-80"
                   style={{
                     left: `${left}%`,
                     width: `${width}%`,
                     backgroundColor: CATEGORY_COLOR[event.category],
-                    boxShadow: `0 0 8px ${CATEGORY_COLOR[event.category]}`,
                   }}
                 />
               </div>

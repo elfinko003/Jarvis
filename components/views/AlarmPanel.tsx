@@ -9,17 +9,17 @@ export function AlarmPanel() {
         {ALARMS.map((a) => (
           <div
             key={a}
-            className="rounded-[2px] border border-red/40 bg-red/10 px-2.5 py-1.5 font-mono text-[10px] uppercase tracking-[1px] text-red"
+            className="rounded-xl border border-red/25 bg-red/[0.06] px-3 py-2 font-mono text-[10px] uppercase tracking-[1px] text-red"
           >
             {a}
           </div>
         ))}
       </div>
 
-      <div className="relative mt-1 min-h-0 flex-1 overflow-hidden rounded-[2px] border border-border-dim">
-        <div className="absolute inset-0 [background:linear-gradient(135deg,#1a1a1f,#0a0a0c)]" />
+      <div className="relative mt-1 min-h-0 flex-1 overflow-hidden rounded-xl border border-white/[0.06]">
+        <div className="absolute inset-0 [background:linear-gradient(135deg,#0d1220,#05070e)]" />
         <div className="absolute inset-0 flex items-center justify-center">
-          <span className="flex h-8 w-8 items-center justify-center rounded-full border border-orange/50 text-orange">
+          <span className="flex h-8 w-8 items-center justify-center rounded-full border border-white/15 text-text-dim">
             ▶
           </span>
         </div>

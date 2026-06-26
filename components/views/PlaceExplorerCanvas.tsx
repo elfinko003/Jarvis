@@ -11,9 +11,9 @@ if (ION_TOKEN) {
   Cesium.Ion.defaultAccessToken = ION_TOKEN;
 }
 
-const RED = Cesium.Color.fromCssColorString("#ff3344");
-const ORANGE = Cesium.Color.fromCssColorString("#ff6b1a");
-const TEXT_BRIGHT = Cesium.Color.fromCssColorString("#e8e8ec");
+const RED = Cesium.Color.fromCssColorString("#ff5a6a");
+const WARM = Cesium.Color.fromCssColorString("#ffb066");
+const TEXT_BRIGHT = Cesium.Color.fromCssColorString("#eef1f6");
 
 const REGION_HEIGHT = 350_000;
 const STREET_HEIGHT = 25_000;
@@ -75,7 +75,7 @@ export function PlaceExplorerCanvas({ command, markers, newsHotspots, idle, dayN
       if (!viewer) return;
       clearInterval(poll);
 
-      viewer.scene.backgroundColor = Cesium.Color.fromCssColorString("#0A0A0C");
+      viewer.scene.backgroundColor = Cesium.Color.fromCssColorString("#05070e");
       if (viewer.scene.skyBox) viewer.scene.skyBox.show = false;
       if (viewer.scene.sun) viewer.scene.sun.show = false;
       if (viewer.scene.moon) viewer.scene.moon.show = false;
@@ -84,7 +84,7 @@ export function PlaceExplorerCanvas({ command, markers, newsHotspots, idle, dayN
         viewer.scene.skyAtmosphere.saturationShift = -0.2;
         viewer.scene.skyAtmosphere.brightnessShift = -0.35;
       }
-      viewer.scene.globe.baseColor = Cesium.Color.fromCssColorString("#05050a");
+      viewer.scene.globe.baseColor = Cesium.Color.fromCssColorString("#05070e");
 
       const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       let lastTime = performance.now();
@@ -275,8 +275,8 @@ export function PlaceExplorerCanvas({ command, markers, newsHotspots, idle, dayN
           <Entity key={`hotspot-${i}`} position={Cesium.Cartesian3.fromDegrees(spot.lng, spot.lat)} name={spot.title}>
             <PointGraphics
               pixelSize={new Cesium.CallbackProperty(() => 5 + 3 * Math.abs(Math.sin(Date.now() / 700)), false)}
-              color={ORANGE.withAlpha(0.8)}
-              outlineColor={ORANGE}
+              color={WARM.withAlpha(0.8)}
+              outlineColor={WARM}
               outlineWidth={1}
             />
           </Entity>

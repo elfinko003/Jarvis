@@ -82,21 +82,19 @@ export function VoiceOrb({ status, amplitudeRef }: VoiceOrbProps) {
       <div
         ref={glowRef}
         aria-hidden
-        className="pointer-events-none absolute inset-[18%] rounded-full bg-blue opacity-40 blur-2xl will-change-[opacity]"
+        className="pointer-events-none absolute inset-[18%] rounded-full bg-blue opacity-25 blur-2xl will-change-[opacity]"
       />
 
       <div
         ref={sphereRef}
-        className="absolute inset-[28%] flex items-center justify-center rounded-full border border-blue/60 shadow-[0_0_30px_rgba(74,158,255,0.55)] will-change-transform"
+        className="absolute inset-[28%] flex items-center justify-center rounded-full border border-blue/30 shadow-[0_0_24px_rgba(191,224,255,0.3)] will-change-transform"
         style={{
           backgroundImage:
-            "radial-gradient(circle at 38% 32%, rgba(74,158,255,0.45), rgba(10,10,12,0.92) 70%), radial-gradient(circle, rgba(74,158,255,0.6) 1px, transparent 1.4px)",
+            "radial-gradient(circle at 38% 32%, rgba(191,224,255,0.25), rgba(10,14,24,0.92) 70%), radial-gradient(circle, rgba(191,224,255,0.4) 1px, transparent 1.4px)",
           backgroundSize: "100% 100%, 6px 6px",
         }}
       >
-        <span className="font-display text-[11px] tracking-[3px] text-blue [text-shadow:0_0_10px_var(--blue)]">
-          J.A.R.V.I.S
-        </span>
+        <span className="text-[11px] font-light tracking-[3px] text-text-bright">J.A.R.V.I.S</span>
       </div>
     </div>
   );

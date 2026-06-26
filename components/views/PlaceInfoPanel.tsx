@@ -56,14 +56,14 @@ function NewsCard({ article }: { article: NewsArticle }) {
       href={article.url}
       target="_blank"
       rel="noopener noreferrer"
-      className="relative flex gap-2 overflow-hidden rounded-[2px] border border-border-dim p-1.5 transition-colors hover:border-orange/50"
+      className="relative flex gap-2 overflow-hidden rounded-lg border border-white/[0.06] p-1.5 transition-colors hover:border-white/20"
     >
-      <div className="relative h-12 w-16 shrink-0 overflow-hidden rounded-[2px] bg-bg-panel-2">
+      <div className="relative h-12 w-16 shrink-0 overflow-hidden rounded-md bg-bg-panel-2">
         {article.imageUrl ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img src={article.imageUrl} alt="" className="h-full w-full object-cover opacity-85" />
         ) : (
-          <div className="h-full w-full [background:linear-gradient(135deg,#1a1a1f,#0a0a0c)]" />
+          <div className="h-full w-full [background:linear-gradient(135deg,#0d1220,#05070e)]" />
         )}
       </div>
       <div className="min-w-0 flex-1">
@@ -97,9 +97,7 @@ export function PlaceInfoPanel({ place, weather, airQuality, articles, loadingNe
   return (
     <div className="flex h-full w-[38%] shrink-0 min-h-0 flex-col gap-2.5 overflow-y-auto">
       <Panel>
-        <p className="font-mono text-2xl uppercase tracking-[2px] text-orange [text-shadow:0_0_8px_var(--orange)]">
-          {place.name}
-        </p>
+        <p className="text-2xl font-light tracking-[1px] text-text-bright">{place.name}</p>
         <p className="mt-1 font-mono text-[10px] uppercase tracking-[2px] text-text-dim">
           {country?.name.toUpperCase() ?? place.countryCode ?? "—"} · {approxUtcOffset(place.lng)} ·{" "}
           {TYPE_LABEL[place.type]}

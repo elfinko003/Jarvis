@@ -29,26 +29,26 @@ export function MarketCandlestick({ candles }: MarketCandlestickProps) {
       height: container.clientHeight,
       layout: {
         background: { type: ColorType.Solid, color: "transparent" },
-        textColor: "#6a6a72",
+        textColor: "#838b9e",
         fontFamily: "JetBrains Mono, monospace",
         fontSize: 10,
       },
       grid: {
-        vertLines: { color: "rgba(42,42,48,0.4)" },
-        horzLines: { color: "rgba(42,42,48,0.4)" },
+        vertLines: { color: "rgba(255,255,255,0.05)" },
+        horzLines: { color: "rgba(255,255,255,0.05)" },
       },
-      timeScale: { borderColor: "#2a2a30" },
-      rightPriceScale: { borderColor: "#2a2a30" },
+      timeScale: { borderColor: "rgba(255,255,255,0.1)" },
+      rightPriceScale: { borderColor: "rgba(255,255,255,0.1)" },
       crosshair: { mode: 0 },
     });
     chartRef.current = chart;
 
     seriesRef.current = chart.addSeries(CandlestickSeries, {
-      upColor: "#00ff88",
-      downColor: "#ff3344",
+      upColor: "#56e0a0",
+      downColor: "#ff5a6a",
       borderVisible: false,
-      wickUpColor: "#00ff88",
-      wickDownColor: "#ff3344",
+      wickUpColor: "#56e0a0",
+      wickDownColor: "#ff5a6a",
     });
 
     const resizeObserver = new ResizeObserver(() => {
