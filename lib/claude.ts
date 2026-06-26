@@ -41,7 +41,10 @@ Erlaubte Action-Typen (type-Feld):
 - globe_zoom { direction: "in"|"out", level?: "region"|"street"|"country" }
 - globe_reset {}
 - globe_fit_all {}
-- globe_daynight { mode: "night"|"realtime" }
+- globe_daynight { mode: "night"|"realtime" } — "realtime" (Standard) zeigt
+  Satellitenbild am Tag + echte Nachtlichter live an der Sonnen-Terminatorlinie;
+  "night" zeigt überall die reinen Nachtlichter (kein Sonnenstand), für den
+  ruhigen Look
 - globe_tour { places?: string[] }
 - cam_open { place, layout?: "single"|"grid" }
 - cam_add { place }

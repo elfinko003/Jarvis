@@ -77,7 +77,6 @@ export function PlaceExplorerCanvas({ command, markers, newsHotspots, idle, dayN
 
       viewer.scene.backgroundColor = Cesium.Color.fromCssColorString("#05070e");
       if (viewer.scene.skyBox) viewer.scene.skyBox.show = false;
-      if (viewer.scene.sun) viewer.scene.sun.show = false;
       if (viewer.scene.moon) viewer.scene.moon.show = false;
       if (viewer.scene.skyAtmosphere) {
         viewer.scene.skyAtmosphere.hueShift = -0.92;
@@ -85,6 +84,20 @@ export function PlaceExplorerCanvas({ command, markers, newsHotspots, idle, dayN
         viewer.scene.skyAtmosphere.brightnessShift = -0.35;
       }
       viewer.scene.globe.baseColor = Cesium.Color.fromCssColorString("#05070e");
+
+      // Real terrain relief + OSM 3D buildings — both free via the ion
+      // token, both irrelevant from orbit but exactly what "fotorealistisch"
+      // means once a voice command flies the camera down to street level.
+      Cesium.createWorldTerrainAsync()
+        .then((terrain) => {
+          viewer.terrainProvider = terrain;
+        })
+        .catch((error) => console.error("World terrain failed to load", error));
+      Cesium.createOsmBuildingsAsync()
+        .then((buildings) => {
+          viewer.scene.primitives.add(buildings);
+        })
+        .catch((error) => console.error("OSM Buildings failed to load", error));
 
       const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       let lastTime = performance.now();
@@ -111,8 +124,12 @@ export function PlaceExplorerCanvas({ command, markers, newsHotspots, idle, dayN
     };
   }, []);
 
-  // Night (NASA Black Marble city lights) vs realtime (real sun position,
-  // true day/night terminator) imagery toggle.
+  // "realtime" (the new default-quality look): real sun position lights the
+  // base Bing Aerial imagery, with NASA Black Marble city lights blended in
+  // ONLY on the night side via dayAlpha/nightAlpha — a live, correctly
+  // positioned day/night terminator, the way Cesium is meant to do this.
+  // "night" keeps the older flat, fully-lit Black Marble look (no sun) for
+  // the calm idle aesthetic, reachable via globe_daynight {mode:"night"}.
   useEffect(() => {
     const poll = setInterval(() => {
       const viewer = viewerRef.current?.cesiumElement;
@@ -123,37 +140,43 @@ export function PlaceExplorerCanvas({ command, markers, newsHotspots, idle, dayN
         viewer.imageryLayers.remove(nightLayerRef.current, true);
         nightLayerRef.current = null;
       }
+      for (let i = 0; i < viewer.imageryLayers.length; i++) {
+        const layer = viewer.imageryLayers.get(i);
+        layer.brightness = 1;
+        layer.saturation = 1;
+        layer.contrast = 1;
+        layer.gamma = 1;
+      }
 
-      if (dayNight === "realtime") {
-        viewer.scene.globe.enableLighting = true;
-        if (viewer.scene.sun) viewer.scene.sun.show = true;
-        viewer.clock.shouldAnimate = true;
-        const darken = () => {
-          for (let i = 0; i < viewer.imageryLayers.length; i++) {
-            const layer = viewer.imageryLayers.get(i);
-            layer.brightness = 0.7;
-            layer.saturation = 0.6;
-          }
-        };
-        darken();
-        viewer.imageryLayers.layerAdded.addEventListener(darken);
-      } else {
-        viewer.scene.globe.enableLighting = false;
-        if (viewer.scene.sun) viewer.scene.sun.show = false;
-        try {
-          const provider = new Cesium.WebMapTileServiceImageryProvider({
-            url: "https://gibs.earthdata.nasa.gov/wmts/epsg4326/best/VIIRS_CityLights_2012/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.jpeg",
-            layer: "VIIRS_CityLights_2012",
-            style: "default",
-            format: "image/jpeg",
-            tileMatrixSetID: "500m",
-            maximumLevel: 8,
-            tilingScheme: new Cesium.GeographicTilingScheme(),
-            credit: new Cesium.Credit("NASA EOSDIS GIBS"),
-          });
-          nightLayerRef.current = viewer.imageryLayers.addImageryProvider(provider);
-        } catch (error) {
-          console.error("GIBS night-lights layer failed, keeping base imagery dark", error);
+      const realtime = dayNight === "realtime";
+      viewer.scene.globe.enableLighting = realtime;
+      if (viewer.scene.sun) viewer.scene.sun.show = realtime;
+      viewer.clock.shouldAnimate = realtime;
+
+      try {
+        const provider = new Cesium.WebMapTileServiceImageryProvider({
+          url: "https://gibs.earthdata.nasa.gov/wmts/epsg4326/best/VIIRS_CityLights_2012/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.jpeg",
+          layer: "VIIRS_CityLights_2012",
+          style: "default",
+          format: "image/jpeg",
+          tileMatrixSetID: "500m",
+          maximumLevel: 8,
+          tilingScheme: new Cesium.GeographicTilingScheme(),
+          credit: new Cesium.Credit("NASA EOSDIS GIBS"),
+        });
+        const layer = viewer.imageryLayers.addImageryProvider(provider);
+        if (realtime) {
+          // only show through on the dark side of the live terminator
+          layer.dayAlpha = 0;
+          layer.nightAlpha = 1;
+        } else {
+          layer.dayAlpha = 1;
+          layer.nightAlpha = 1;
+        }
+        nightLayerRef.current = layer;
+      } catch (error) {
+        console.error("GIBS night-lights layer failed", error);
+        if (!realtime) {
           for (let i = 0; i < viewer.imageryLayers.length; i++) {
             const layer = viewer.imageryLayers.get(i);
             layer.brightness = 0.18;

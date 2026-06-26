@@ -64,7 +64,7 @@ export function PlaceExplorerView() {
   const [markers, setMarkers] = useState<GlobeMarker[]>([]);
   const [cams, setCams] = useState<CamState[]>([]);
   const [fullscreenPlace, setFullscreenPlace] = useState<string | null>(null);
-  const [dayNight, setDayNight] = useState<"night" | "realtime">("night");
+  const [dayNight, setDayNight] = useState<"night" | "realtime">("realtime");
   const [command, setCommand] = useState<GlobeCommand | null>(null);
   const [weather, setWeather] = useState<WeatherData | null>(null);
   const [airQuality, setAirQuality] = useState<AirQualityData | null>(null);

@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { Panel, LoadingState } from "@/components/hud";
 import { currencyForCca2, findCountryByCca2, flagEmoji } from "@/lib/countries";
 import type { PlaceResult, PlaceType } from "@/lib/geocode";
@@ -40,6 +41,25 @@ const INTEL_FALLBACK = [
 function approxUtcOffset(lng: number): string {
   const offset = Math.round(lng / 15);
   return `UTC${offset >= 0 ? "+" : ""}${offset}`;
+}
+
+// No timezone API/key for this — longitude/15 is a rough stand-in for the
+// real timezone boundary, same approximation as approxUtcOffset above.
+function useLocalTime(lng: number): string {
+  const [label, setLabel] = useState("");
+
+  useEffect(() => {
+    const offsetMs = Math.round(lng / 15) * 3_600_000;
+    const update = () => {
+      const local = new Date(Date.now() + offsetMs);
+      setLabel(local.toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit", timeZone: "UTC" }));
+    };
+    update();
+    const interval = setInterval(update, 30_000);
+    return () => clearInterval(interval);
+  }, [lng]);
+
+  return label;
 }
 
 function formatTime(iso?: string): string {
@@ -85,6 +105,7 @@ interface PlaceInfoPanelProps {
 }
 
 export function PlaceInfoPanel({ place, weather, airQuality, articles, loadingNews }: PlaceInfoPanelProps) {
+  const localTime = useLocalTime(place.lng);
   const country = findCountryByCca2(place.countryCode ?? "");
   const aqi = airQuality ?? { aqi: null, category: "unavailable" as const, available: false };
   const situationLines = [articles[0]?.title, articles[1]?.title].filter((t): t is string => Boolean(t));
@@ -99,7 +120,7 @@ export function PlaceInfoPanel({ place, weather, airQuality, articles, loadingNe
       <Panel>
         <p className="text-2xl font-light tracking-[1px] text-text-bright">{place.name}</p>
         <p className="mt-1 font-mono text-[10px] uppercase tracking-[2px] text-text-dim">
-          {country?.name.toUpperCase() ?? place.countryCode ?? "—"} · {approxUtcOffset(place.lng)} ·{" "}
+          {country?.name.toUpperCase() ?? place.countryCode ?? "—"} · {localTime || "—"} ({approxUtcOffset(place.lng)}) ·{" "}
           {TYPE_LABEL[place.type]}
         </p>
       </Panel>
